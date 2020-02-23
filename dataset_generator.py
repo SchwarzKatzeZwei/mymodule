@@ -50,21 +50,21 @@ def main(args):
             if args.m < idx + 1:
                 break
 
-    # Mix-up使う場合（確認用）
-    imgs = []
-    for i, img_path in enumerate(glob.glob(args.s+"/*")):
-        img = load_img(img_path)
-        img = img.resize((900, 900))
-        x = img_to_array(img)
-        imgs.append(np.asarray(x))
-    imgs = np.array(imgs)
-    for idx, d in enumerate(generator.flow(imgs, [0, 1], batch_size=32)):
-        dg_img = array_to_img(d[0][0], scale=True)
-        filename = args.d + "/" + os.path.splitext(os.path.basename(img_path))[0] \
-            + '_aug-' + str(idx).zfill(3) + ".jpg"
-        dg_img.save(filename)
-        if args.m < idx + 1:
-            break
+    # # Mix-up使う場合（確認用）
+    # imgs = []
+    # for i, img_path in enumerate(glob.glob(args.s+"/*")):
+    #     img = load_img(img_path)
+    #     img = img.resize((900, 900))
+    #     x = img_to_array(img)
+    #     imgs.append(np.asarray(x))
+    # imgs = np.array(imgs)
+    # for idx, d in enumerate(generator.flow(imgs, [0, 1], batch_size=32)):
+    #     dg_img = array_to_img(d[0][0], scale=True)
+    #     filename = args.d + "/" + os.path.splitext(os.path.basename(img_path))[0] \
+    #         + '_aug-' + str(idx).zfill(3) + ".jpg"
+    #     dg_img.save(filename)
+    #     if args.m < idx + 1:
+    #         break
 
 
 if __name__ == "__main__":
