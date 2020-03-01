@@ -27,9 +27,11 @@ class ImageDataGeneratorCustom(ImageDataGenerator):
         assert cutout_mask_size >= 0
         self.cutout_mask_size = cutout_mask_size
 
-    # ランダムクロップ
-    # https://jkjung-avt.github.io/keras-image-cropping/
     def random_crop(self, original_img):
+        """ランダムクロップ
+
+        参考 https://jkjung-avt.github.io/keras-image-cropping/
+        """
         # Note: image_data_format is 'channel_last'
         assert original_img.shape[2] == 3
         if original_img.shape[0] < self.random_crop_size[0] or original_img.shape[1] < self.random_crop_size[1]:
@@ -42,9 +44,11 @@ class ImageDataGeneratorCustom(ImageDataGenerator):
         y = np.random.randint(0, height - dy + 1)
         return original_img[y:(y+dy), x:(x+dx), :]
 
-    # Mix-up
-    # 参考 https://qiita.com/yu4u/items/70aa007346ec73b7ff05
     def mix_up(self, X1, y1, X2, y2):
+        """Mix-up
+
+        参考 https://qiita.com/yu4u/items/70aa007346ec73b7ff05
+        """
         assert X1.shape[0] == y1.shape[0] == X2.shape[0] == y2.shape[0]
         batch_size = X1.shape[0]
         lb = np.random.beta(self.mix_up_alpha, self.mix_up_alpha, batch_size)
@@ -55,6 +59,10 @@ class ImageDataGeneratorCustom(ImageDataGenerator):
         return X, y
 
     def cutout(self, x, y):
+        """Cut-out
+
+        参考 https://qiita.com/shoji9x9/items/c4a0f56db23d80da14af
+        """
         return np.array(list(map(self._cutout, x))), y
 
     def _cutout(self, image_origin):
@@ -84,6 +92,7 @@ class ImageDataGeneratorCustom(ImageDataGenerator):
                             classes=None, class_mode='categorical', batch_size=32, shuffle=True,
                             seed=None, save_to_dir=None, save_prefix='', save_format='png',
                             follow_links=False, subset=None, interpolation='nearest'):
+        """ flow_flow_directory overrade """
         # 親クラスのflow_from_directory
         batches = super().flow_from_directory(directory, target_size, color_mode, classes, class_mode, batch_size,
                                               shuffle, seed, save_to_dir, save_prefix, save_format, follow_links,
@@ -121,6 +130,7 @@ class ImageDataGeneratorCustom(ImageDataGenerator):
             yield (batch_x, batch_y)
 
     def flow(self, *args, **kwargs):
+        """ flow overrade """
         batches = super().flow(*args, **kwargs)
         # 拡張処理
         while True:

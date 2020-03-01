@@ -4,36 +4,37 @@ import numpy as np
 
 class OpenCVOrgUtil:
     """OpenCVユーティリティ"""
+
     @staticmethod
-    def get_height(img):
+    def get_height(img: np.ndarray) -> int:
         """画像の縦幅を返却する
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
 
         Returns:
-            (int): 画像縦幅
+            int: 画像縦幅
         """
         return img.shape[0]
 
     @staticmethod
-    def get_width(img):
+    def get_width(img: np.ndarray) -> int:
         """画像横幅を返却する
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
 
         Returns:
-            (int): 画像横幅
+            int: 画像横幅
         """
         return img.shape[1]
 
     @staticmethod
-    def get_channel(img):
+    def get_channel(img: np.ndarray) -> int:
         """画像チャンネル数を返却する
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
 
         Returns:
             int: 画像チャンネル数
@@ -41,116 +42,116 @@ class OpenCVOrgUtil:
         return img.shape[2]
 
     @staticmethod
-    def erosion(img, kernel, iterations=1):
+    def erosion(img: np.ndarray, kernel: list, iterations=1) -> np.ndarray:
         """収縮処理
 
         Args:
-            img (np.ndarray): 画像データ
-            kernel (list(int, int)): カーネルサイズ
+            img (numpy.ndarray): 画像データ
+            kernel (list[int, int]): カーネルサイズ
             iterations (int, optional): 試行回数 Defaults to 1
 
         Returns:
-            (np.ndarray): 処理画像
+            numpy.ndarray: 処理画像
         """
         return cv2.erode(img, kernel, iterations=iterations)
 
     @staticmethod
-    def dilation(img, kernel, iterations=1):
+    def dilation(img: np.ndarray, kernel: list, iterations=1) -> np.ndarray:
         """膨張処理
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
             kernel (list(int, int)): カーネルサイズ
             iterations (int, optional): 試行回数 Defaults to 1
 
         Returns:
-            (np.ndarray): 処理画像
+            numpy.ndarray: 処理画像
         """
         return cv2.dilate(img, kernel, iterations=iterations)
 
     @staticmethod
-    def opening(img, kernel, iterations=1):
+    def opening(img: np.ndarray, kernel: list, iterations=1) -> np.ndarray:
         """オープニング処理（収縮->膨張処理）
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpt.ndarray): 画像データ
             kernel (list(int, int)): カーネルサイズ
             iterations (int, optional): 試行回数 Defaults to 1
 
         Returns:
-            (np.ndarray): 処理画像
+            numpy.ndarray: 処理画像
         """
         return cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel, iterations=iterations)
 
     @staticmethod
-    def closing(img, kernel, iterations=1):
+    def closing(img: np.ndarray, kernel: list, iterations=1) -> np.ndarray:
         """クロージング処理（膨張->収縮処理）
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
             kernel (list(int, int)): カーネルサイズ
             iterations (int, optional): 試行回数 Defaults to 1
 
         Returns:
-            (np.ndarray): 処理画像
+            numpy.ndarray: 処理画像
         """
         return cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel, iterations=iterations)
 
     @staticmethod
-    def gaussian_blur(img, kernel, sigmaX=0):
+    def gaussian_blur(img: np.ndarray, kernel: list, sigmaX=0) -> np.ndarray:
         """ガウシアンフィルタ（画像平滑化）
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
             kernel (list(int, int)): カーネルサイズ
             sigma (int, optional): ガウシアンの標準偏差値横方向 Defaults to 0
 
         Returns:
-            (np.ndarray): 処理画像
+            numpy.ndarray: 処理画像
         """
         return cv2.GaussianBlur(img, kernel, sigmaX)
 
     @staticmethod
-    def contrast_correction(img, contrast):
+    def contrast_correction(img: np.ndarray, contrast: float) -> np.ndarray:
         """コントラスト補正
 
         Args:
-            img (np.ndarray): 画像データ(gray)
+            img (numpy.ndarray): 画像データ(gray)
             contrast (float)): ガンマ値
 
         Returns:
-            (np.ndarray): 処理画像
+            numpy.ndarray: 処理画像
         """
         imax = img.max()
         img = imax * (img / imax) ** (1 / contrast)
         return img.astype('uint8') * 255
 
     @staticmethod
-    def gamma_correction(img, gamma):
+    def gamma_correction(img: np.ndarray, gamma: float) -> np.ndarray:
         """ガンマ補正
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
             gamma (float): ガンマ値
 
         Returns:
-            np.ndarray: 処理画像
+            numpy.ndarray: 処理画像
         """
         table = (np.arange(256) / 255) ** gamma * 255
         table = np.clip(table, 0, 255).astype(np.uint8)
         return cv2.LUT(img, table)
 
     @staticmethod
-    def split_VH(img, ver_num, hor_num):
+    def split_VH(img: np.ndarray, ver_num: int, hor_num: int) -> list:
         """画像を縦横指定分割する
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
             ver_num (int): 縦分割数
             hor_num (int): 横分割数
 
         Returns:
-            results (list(np.ndarray)): 分割画像リスト
+            list[numpy.ndarray]: 分割画像リスト
         """
         results = []
         height, width = img.shape[0:2]
@@ -173,16 +174,16 @@ class OpenCVOrgUtil:
         return results
 
     @staticmethod
-    def concat_VH(imgs, ver_num, hor_num):
+    def concat_VH(imgs: list, ver_num: int, hor_num: int) -> np.ndarray:
         """画像を縦横指定結合する
 
         Args:
-            imgs (list(np.ndarray)): 分割画像リスト
+            imgs (list[numpy.ndarray]): 分割画像リスト
             ver_num (int): 縦分割数
             hor_num (int): 横分割数
 
         Returns:
-            (np.ndarray): 結合画像
+            numpy.ndarray: 結合画像
         """
         assert ver_num >= 1
         assert hor_num >= 1
@@ -197,8 +198,9 @@ class OpenCVOrgUtil:
         return concat_img
 
     @staticmethod
-    def key_stop():
+    def key_stop() -> None:
         """キー入力待ちを発生させる"""
+
         while True:
             key = cv2.waitKey(0) & 0xFF
             if key == ord("w"):
@@ -210,23 +212,23 @@ class OpenCVOrgUtil:
                 exit()
 
     @staticmethod
-    def crop(img, xmin, ymin, xmax, ymax):
+    def crop(img: np.ndarray, xmin: int, ymin: int, xmax: int, ymax: int) -> np.ndarray:
         """画像をクロップする
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
             xmin (int): 最左座標
             ymin (int): 最上座標
             xmax (int): 最右座標
             ymax (int): 最下座標
 
         Returns:
-            (np.ndarray): クロップ画像
+            numpy.ndarray: クロップ画像
         """
         return img[ymin:ymax, xmin:xmax]
 
     @staticmethod
-    def affin(image, angle):
+    def affin(image: np.ndarray, angle: float) -> np.ndarray:
         """画像を回転（アフィン変換）する
 
         Args:
@@ -234,7 +236,7 @@ class OpenCVOrgUtil:
             angle (float): 角度(時計回り)
 
         Returns:
-            (ndarray): 回転画像
+            numpy.ndarray: 回転画像
         """
         (h, w) = image.shape[:2]
         center = (w // 2, h // 2)
@@ -242,62 +244,62 @@ class OpenCVOrgUtil:
         return cv2.warpAffine(image, M, (w, h))
 
     @staticmethod
-    def paste(bg_img, fg_img, x=0, y=0, alpha_bg=0.5, alpha_fg=0.5):
+    def paste(bg_img: np.ndarray, fg_img: np.ndarray, x=0, y=0, alpha_bg=0.5, alpha_fg=0.5) -> np.ndarray:
         """画像に別の画像画像を貼り付ける。
 
         Args:
-            bg_img (ndarray): 背景となる画像データ
-            fg_img (ndarray): 前傾となる画像データ
+            bg_img (numpy.ndarray): 背景となる画像データ
+            fg_img (numpy.ndarray): 前傾となる画像データ
             x (int, optional): 貼付位置X座標 Defaults to 0
             y (int, optional): 貼付位置Y座標 Defaults to 0
             alpha_bg (float, optional): 背景画像アルファ値 Defaults to 0.5
             alpha_fg (float, optional): 前景画像アルファ値 Defaults to 0.5
 
         Returns:
-            (np.ndarray): 合成画像
+            numpy.ndarray: 合成画像
         """
         (top_h, top_w) = fg_img.shape[:2]
         bg_img[y:y+top_h, x:x+top_w] = cv2.addWeighted(bg_img[y:y+top_h, x:x+top_w], alpha_bg, fg_img, alpha_fg, 0)
         return bg_img
 
     @staticmethod
-    def scale_to_width(img, width):
+    def scale_to_width(img: np.ndarray, width: int) -> np.ndarray:
         """width指定リサイズ
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
             width (int): 指定横幅
 
         Returns:
-            (np.ndarray): 処理画像
+            numpy.ndarray: 処理画像
         """
         scale = width / img.shape[1]
         return cv2.resize(img, dsize=None, fx=scale, fy=scale)
 
     @staticmethod
-    def scale_to_height(img, height):
+    def scale_to_height(img: np.ndarray, height: int) -> np.ndarray:
         """height指定リサイズ
 
         Args:
-            img (np.ndarray): 画像データ
+            img (numpy.ndarray): 画像データ
             height (int): 指定縦幅
 
         Returns:
-            (np.ndarray): 処理画像
+            numpy.ndarray: 処理画像
         """
         scale = height / img.shape[0]
         return cv2.resize(img, dsize=None, fx=scale, fy=scale)
 
     @staticmethod
-    def template_match(temple_img, target_img):
+    def template_match(temple_img: np.ndarray, target_img: np.ndarray) -> float:
         """テンプレートマッチングを実施する
 
         Args:
-            temple_img (np.ndarray): テンプレート画像
-            target_img (np.ndarray): 比較対象画像
+            temple_img (numpy.ndarray): テンプレート画像
+            target_img (numpy.ndarray): 比較対象画像
 
         Returns:
-            (float): 類似度
+            float: 類似度
         """
         src_h, src_w = temple_img.shape[:2]
         dst_h, dst_w = target_img.shape[:2]
@@ -314,16 +316,17 @@ class OpenCVOrgUtil:
             return round(np.max(res), 2)
 
     @staticmethod
-    def hists_match(src_img, dst_img):
+    def hists_match(src_img: np.ndarray, dst_img: np.ndarray) -> float:
         """ヒストグラムマッチングを実施する
+
         http://pynote.hatenablog.com/entry/opencv-comparehist
 
         Args:
-            src_img (np.ndarray): テンプレート画像
-            dst_img (np.ndarray): 比較対象画像
+            src_img (numpy.ndarray): テンプレート画像
+            dst_img (numpy.ndarray): 比較対象画像
 
         Returns:
-            (float): 類似度
+            float: 類似度
         """
         ch_names = {0: "Hue", 1: "Saturation", 2: "Brightness"}
 
@@ -342,16 +345,16 @@ class OpenCVOrgUtil:
         return round(mean, 2)
 
     @staticmethod
-    def akaze_match(src_img, dst_img):
+    def akaze_match(src_img: np.ndarray, dst_img: np.ndarray) -> float:
         """AKAZE特徴量マッチングを実施する
         https://qiita.com/hitomatagi/items/caac014b7ab246faf6b1
 
         Args:
-            src_img (ndarray): テンプレート画像
-            dst_img (ndarray): 比較対象画像
+            src_img (numpy.ndarray): テンプレート画像
+            dst_img (numpy.ndarray): 比較対象画像
 
         Returns:
-            (float): 特徴量の距離
+            float: 特徴量の距離
         """
         # A-KAZE検出器の生成
         akaze = cv2.AKAZE_create()
@@ -371,9 +374,3 @@ class OpenCVOrgUtil:
         except Exception as e:
             print(e)
             return 99999
-
-
-img = cv2.imread("/Users/shogo/Downloads/78714767_p0.jpg")
-# img2 = cv2.imread("/Users/shogo/Downloads/ERZEGC_U8AUBwHd.jpeg")
-_img = OpenCVOrgUtil.gamma_correction(img, 0.5)
-cv2.imwrite("test.jpg", _img)
