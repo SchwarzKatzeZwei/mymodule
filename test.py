@@ -97,6 +97,9 @@ class ImageDataGeneratorCustom(ImageDataGenerator):
         batches = super().flow_from_directory(directory, target_size, color_mode, classes, class_mode, batch_size,
                                               shuffle, seed, save_to_dir, save_prefix, save_format, follow_links,
                                               subset, interpolation)
+        self.n = batches.n
+        self.batch_size = batches.batch_size
+
         # 拡張処理
         while True:
             batch_x, batch_y = next(batches)
